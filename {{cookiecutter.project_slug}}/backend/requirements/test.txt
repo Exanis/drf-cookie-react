@@ -1,0 +1,10 @@
+# Include base dependencies
+-r common.txt
+
+# Add testing tools
+behave==1.2.5
+coverage==4.4.2
+
+# Add code quality tools
+pylint==1.7.4
+flake8==3.5.0
