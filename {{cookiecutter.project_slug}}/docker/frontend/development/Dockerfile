@@ -1,11 +1,11 @@
-FROM nginx:1.13.7
+FROM node:9.2.0
 MAINTAINER {{ cookiecutter.author_name }} <{{ cookiecutter.email }}>
 
-RUN mkdir -p /var/www/ /var/static/ /var/media/
+ENV NPM_CONFIG_LOGLEVEL info
 
-COPY src/conf/nginx.conf /etc/nginx/nginx.conf
-COPY src/api/static/* /var/static/
+RUN mkdir -p /var/src/frontend/
+WORKDIR /var/src/frontend/
 
-EXPOSE 80
+EXPOSE 3000
 
-CMD nginx -g 'daemon off;'
+CMD npm i . && npm start

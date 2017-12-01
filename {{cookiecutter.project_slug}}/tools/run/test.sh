@@ -24,3 +24,4 @@ function run_test {
 ./tools/run/build.sh test
 
 run_test backend
+run_test frontend

@@ -54,3 +54,4 @@ fi
 build backend ${TARGET}
 build frontend ${TARGET}
 build database ${TARGET}
+build router ${TARGET}
