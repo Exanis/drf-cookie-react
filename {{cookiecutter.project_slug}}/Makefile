@@ -34,8 +34,14 @@ validate:
 build_dev:
 	./tools/run/build.sh development
 
-run: build_dev
+internal_run:
 	$(DOCKERCOMPOSE) -f docker/compose/development/docker-compose.yml up
+
+internal_down:
+	$(DOCKERCOMPOSE) -f docker/compose/development/docker-compose.yml down
+
+run: build_dev
+	@bash -c "trap 'trap - SIGINT; $(MAKE) internal_down; exit 0;' SIGINT; $(MAKE) internal_run; trap - SIGINT;"
 
 # Django command
 migrations: build_dev
@@ -105,10 +111,14 @@ rest:
 	$(DOCKER) rm create-model-backend
 
 # Install command
+# Note: we use fedora for install_node since it's the only distribution to offer an easy-to-use access to npm
+install_node:
+	$(DOCKER) run --rm -v $(shell pwd):/var/install -w /var/install/frontend/ --name install_node fedora:latest /bin/bash -c "dnf install -y nodejs && npm i ."
+
 generate_keys:
-    $(eval SECRET_KEY:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
-    $(eval POSTGRES_SU_PASSWORD:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
-    $(eval POSTGRES_PASSWORD:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
+	$(eval SECRET_KEY:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
+	$(eval POSTGRES_SU_PASSWORD:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
+	$(eval POSTGRES_PASSWORD:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))
 
 install_key: generate_keys
 	sed "s/@@SECRET_KEY@@/$(SECRET_KEY)/" ./docker/compose/development/docker-compose.yml.tpl > ./docker/compose/development/docker-compose.yml
@@ -121,7 +131,7 @@ install_permissions:
 	chmod +x ./backend/launch.sh
 	chmod +x ./database/init-user.sh
 
-install_local: install_permissions install_key static
+install_local: install_permissions install_key install_node static
 
 install_github: install_local
 	./tools/install/install.sh

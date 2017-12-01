@@ -10,8 +10,8 @@ services:
       - PGPASSWORD=@@POSTGRES_PASSWORD@@
     volumes:
       - ../../../backend:/usr/src/backend/src
-      - ../../../frontend/api/media:/usr/src/media
-      - ../../../frontend/api/static:/usr/src/static
+      - ../../../router/api/media:/usr/src/media
+      - ../../../router/api/static:/usr/src/static
     ports:
       - 8000:8000
     links:
@@ -19,9 +19,16 @@ services:
   frontend:
     image: {{cookiecutter.project_slug}}/frontend:development
     volumes:
-      - ../../../frontend/api/:/var/www/api/
+      - ../../../frontend/:/var/src/frontend/
+    ports:
+      - 3000:3000
+  router:
+    image: {{cookiecutter.project_slug}}/router:development
+    volumes:
+      - ../../../router/api/:/var/www/api/
     links:
       - backend:backend
+      - frontend:frontend
     ports:
       - 80:80
   db:

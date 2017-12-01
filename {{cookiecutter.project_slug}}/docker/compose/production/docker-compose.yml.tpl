@@ -20,10 +20,15 @@ services:
       - db:db
   frontend:
     image: {{cookiecutter.project_slug}}/frontend:production
+    ports:
+      - 3000
+  router:
+    image: {{cookiecutter.project_slug}}/frontend:production
     volumes:
-      - ../../../frontend/api/:/var/www/api/
+      - ../../../router/api/:/var/www/api/
     links:
       - backend:backend
+      - frontend:frontend
     ports:
       - 80:80
   redis:
