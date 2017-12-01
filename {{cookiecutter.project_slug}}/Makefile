@@ -34,8 +34,14 @@ validate:
 build_dev:
 	./tools/run/build.sh development
 
-run: build_dev
+internal_run:
 	$(DOCKERCOMPOSE) -f docker/compose/development/docker-compose.yml up
+
+internal_down:
+	$(DOCKERCOMPOSE) -f docker/compose/development/docker-compose.yml down
+
+run: build_dev
+	@bash -c "trap 'trap - SIGINT; $(MAKE) internal_down; exit 0;' SIGINT; $(MAKE) internal_run; trap - SIGINT;"
 
 # Django command
 migrations: build_dev
@@ -107,7 +113,7 @@ rest:
 # Install command
 # Note: we use fedora for install_node since it's the only distribution to offer an easy-to-use access to npm
 install_node:
-	$(DOCKER) run --rm -v $(shell pwd):/var/install -w /var/install/frontend/src --name install_node fedora:latest /bin/bash -c "dnf install -y nodejs && npm i ."
+	$(DOCKER) run --rm -v $(shell pwd):/var/install -w /var/install/frontend/ --name install_node fedora:latest /bin/bash -c "dnf install -y nodejs && npm i ."
 
 generate_keys:
 	$(eval SECRET_KEY:=$(shell head -n 400 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 60 | head -n 1 | tr -d '\n'))

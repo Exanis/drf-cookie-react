@@ -17,8 +17,18 @@ function build {
     rm -rf target
     mkdir -p target/src
 
+    # Prepare files list
+    if [ -f "${1}"/.buildignore ]; then
+        FILES=$(ls "${1}" | grep -v $(cat "${1}"/.buildignore))
+    else
+        FILES=$(ls "${1}")
+    fi
+
     # Prepare content to build from
-    cp -r "${1}"/* target/src
+    OLDPATH=$(pwd)
+    cd "${1}"
+    cp -r ${FILES} ${OLDPATH}/target/src
+    cd ${OLDPATH}
     cp "docker/${1}/${2}/Dockerfile" target/
 
     # Build
