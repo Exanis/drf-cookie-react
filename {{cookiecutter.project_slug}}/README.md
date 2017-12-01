@@ -69,6 +69,15 @@ runned from the root of the project. Here is a complete list :
 - **deploy** : Generate a docker-compose file to use on production environment
 - **branch**: Create a new branch of the project
 
+## Node and packages
+
+A common practice in node univers is to use npm i --save (or yarn install) to add package
+to packages.json. Although this would totally work in this project, it would require you
+to install npm (and eventually yarn) to your local work environment.
+
+If you want to avoid this, you can add the dependencies you need to your package.json ;
+they will be installed when you will launch your container (either in dev and prod mode)
+
 ## Production usage
 
 To deploy your project on production, we suggest docker-compose. This, however, is mostly a

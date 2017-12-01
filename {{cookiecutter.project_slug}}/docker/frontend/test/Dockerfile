@@ -1,11 +1,10 @@
-FROM nginx:1.13.7
+FROM node:9.2.0
 MAINTAINER {{ cookiecutter.author_name }} <{{ cookiecutter.email }}>
 
-RUN mkdir -p /var/www/ /var/static/ /var/media/
+ENV NPM_CONFIG_LOGLEVEL info
+ENV CI 1
 
-COPY src/conf/nginx.conf /etc/nginx/nginx.conf
-COPY src/api/static/* /var/static/
+RUN mkdir -p /usr/src/frontend/src
+WORKDIR /usr/src/frontend/src
 
-EXPOSE 80
-
-CMD nginx -g 'daemon off;'
+CMD npm i . && npm test && npm test -- --coverage
