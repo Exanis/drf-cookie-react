@@ -84,11 +84,11 @@ repo.enable()
 
 # Todo: Add codacy here
 {% if cookiecutter.use_codacy == 'y' %}
-print("Warning: right now, codacy api's documentation is down and support have no ETA for it to be back.")
+print("Warning: codacy does not support to add a project with every parameters needed for this cookiecutter.")
 print("Please manually add your project to codacy.")
 {% endif %}
 
-{% if cookiecutter.use_travis == 'y' or cookiecutter.use_codacy == 'y' %}
+{% if cookiecutter.use_travis == 'y' %}
 auth.delete()
 {% endif %}
 

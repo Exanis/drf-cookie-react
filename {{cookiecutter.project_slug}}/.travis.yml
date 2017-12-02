@@ -6,13 +6,16 @@ services:
 language: python
 
 install:
+{% if cookiecutter.use_codacy == 'y' %}
   - pip install codacy-coverage
+{% endif %}
   - chmod +x ./tools/run/build.sh
   - chmod +x ./tools/run/test.sh
   - chmod +x ./backend/test.sh
 
 script:
   - ./tools/run/test.sh
-
+{% if cookiecutter.use_codacy == 'y' %}
 after_success:
   - python-codacy-coverage -r backend/coverage.xml
+{% endif %}
