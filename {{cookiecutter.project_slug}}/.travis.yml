@@ -8,9 +8,9 @@ language: python
 install:
 {% if cookiecutter.use_codacy == 'y' %}
   - pip install codacy-coverage
+  - npm install -g codacy-coverage
 {% endif %}
-  - chmod +x ./tools/run/build.sh
-  - chmod +x ./tools/run/test.sh
+  - chmod +x ./tools/*/*.sh
   - chmod +x ./backend/test.sh
 
 script:
@@ -18,4 +18,5 @@ script:
 {% if cookiecutter.use_codacy == 'y' %}
 after_success:
   - python-codacy-coverage -r backend/coverage.xml
+  - cat frontend/coverage/lcov.info | codacy-coverage
 {% endif %}

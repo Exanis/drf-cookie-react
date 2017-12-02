@@ -9,8 +9,8 @@ help:
 	@echo "	help: Display this help"
 	@echo "	validate: Run all tests of current code"
 	@echo "	run: Run the code and let you test it on local computer"
-	@echo " deploy: Generate a docker-compose file to use on production environment"
-	@echo " install_local: Install the project on your local environment"
+	@echo "	deploy: Generate a docker-compose file to use on production environment"
+	@echo "	install_local: Install the project on your local environment"
 	@echo
 	@echo "Django tools"
 	@echo "	migrations: Generate backend migrations (as python manage.py makemigrations)"
@@ -21,7 +21,7 @@ help:
 	@echo "	app: Create a new app in django (using create_app command)"
 	@echo "	model: Create a new model in django (using create_model command)"
 	@echo "	rest: Turn a model to a rest model, creating tests, viewset and serializers (using make_rest_model command)"
-	@echo " static: Collect all static files on the project. This is probably not what you want to do."
+	@echo "	static: Collect all static files on the project. This is probably not what you want to do."
 	@echo
 	@echo "Git shortcuts"
 	@echo "	branch: Create a new branch and add it to the remote"
@@ -46,27 +46,27 @@ run: build_dev
 # Django command
 migrations: build_dev
 	./tools/run/run.sh backend migration-backend
-	$(DOCKER) exec -it migration-backend python manage.py makemigrations
+	$(DOCKER) exec migration-backend python manage.py makemigrations
 	$(DOCKER) stop migration-backend
 	$(DOCKER) rm migration-backend
 
 single_shell: build_dev
 	./tools/run/run.sh backend shell-backend
-	$(DOCKER) exec -it shell-backend /bin/bash
+	$(DOCKER) exec shell-backend /bin/bash
 	$(DOCKER) stop shell-backend
 	$(DOCKER) rm shell-backend
 
 single_django_shell: build_dev
 	./tools/run/run.sh backend django-shell-backend
-	$(DOCKER) exec -it django-shell-backend python manage.py shell_plus
+	$(DOCKER) exec django-shell-backend python manage.py shell_plus
 	$(DOCKER) stop django-shell-backend
 	$(DOCKER) rm django-shell-backend
 
 running_shell:
-	$(DOCKER) exec -it development_backend_1 /bin/bash
+	$(DOCKER) exec development_backend_1 /bin/bash
 
 running_django_shell:
-	$(DOCKER) exec -it development_backend_1 python manage.py shell_plus
+	$(DOCKER) exec development_backend_1 python manage.py shell_plus
 
 static: build_dev
 	$(DOCKERCOMPOSE) -f docker/compose/development/docker-compose.yml up -d
@@ -76,37 +76,37 @@ static: build_dev
 app:
 	./tools/run/run.sh backend create-app-backend
 	@read -p "Application name: " APP \
-		&& $(DOCKER) exec -it create-app-backend python manage.py create_app ${APP}
+		&& $(DOCKER) exec create-app-backend python manage.py create_app $${APP}
 	$(DOCKER) stop create-app-backend
 	$(DOCKER) rm create-app-backend
 
 model:
 	./tools/run/run.sh backend create-model-backend
 	@read -p "Model name: " NAME; \
-		@read -p "Application name [api]: " APP; \
-		if [ -z "${APP}" ]; then APP='api'; fi; \
-		$(DOCKER) exec -it create-model-backend python manage.py create_model ${APP} ${NAME}
+		read -p "Application name [api]: " APP; \
+		if [ -z "$${APP}" ]; then APP='api'; fi; \
+		$(DOCKER) exec create-model-backend python manage.py create_model $${APP} $${NAME}
 	$(DOCKER) stop create-model-backend
 	$(DOCKER) rm create-model-backend
 
 rest:
 	./tools/run/run.sh backend create-model-backend
 	@read -p "Model name: " NAME; \
-		@read -p "Application name [api]: " APP; \
-		@echo "Possible permissions: "; \
-		@echo " - everyone"; \
-		@echo " - auth"; \
-		@echo " - auth_or_read_only"; \
-		@echo " - model"; \
-		@echo " - model_or_read_only"; \
-		@echo " - object"; \
-		@echo " - object_or_read_only"; \
-		@echo " - object_or_anon_read_only"; \
-		@echo " - admin"; \
-		@read -p "Permissions [object]: " PERMS; \
-		if [ -z "${APP}" ]; then APP='api'; fi; \
-		if [ -z "${PERMS}" ]; then PERMS='object'; fi; \
-		&& $(DOCKER) exec -it create-model-backend python manage.py make_rest_model ${APP} ${NAME} -p ${PERMS}
+		read -p "Application name [api]: " APP; \
+		echo "Possible permissions: "; \
+		echo " - everyone"; \
+		echo " - auth"; \
+		echo " - auth_or_read_only"; \
+		echo " - model"; \
+		echo " - model_or_read_only"; \
+		echo " - object"; \
+		echo " - object_or_read_only"; \
+		echo " - object_or_anon_read_only"; \
+		echo " - admin"; \
+		read -p "Permissions [object]: " PERMS; \
+		if [ -z "$${APP}" ]; then APP='api'; fi; \
+		if [ -z "$${PERMS}" ]; then PERMS='object'; fi; \
+		&& $(DOCKER) exec create-model-backend python manage.py make_rest_model $${APP} $${NAME} -p $${PERMS}
 	$(DOCKER) stop create-model-backend
 	$(DOCKER) rm create-model-backend
 
@@ -154,5 +154,5 @@ branch:
 	git checkout master
 	git pull
 	@read -p "Branch name: " name \
-		&& git checkout -b ${name} \
-		&& git push --set-upstream origin ${name}
+		&& git checkout -b $${name} \
+		&& git push --set-upstream origin $${name}
