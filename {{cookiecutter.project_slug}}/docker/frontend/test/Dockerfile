@@ -7,4 +7,4 @@ ENV CI 1
 RUN mkdir -p /usr/src/frontend/src
 WORKDIR /usr/src/frontend/src
 
-CMD npm i . && npm test && npm test -- --coverage
+CMD npm i . && npm test -- --coverage
