@@ -133,12 +133,12 @@ install_permissions:
 
 install_local: install_permissions install_key install_node static
 
-install_github: install_local
+install_github: install_permissions install_key
 	./tools/install/install.sh
 	rm -rf tools/install
 
 {% if cookiecutter.use_github == 'y' %}
-install: install_github
+install: install_github install_node static
 {% else %}
 install: install_local
 {% endif %}
