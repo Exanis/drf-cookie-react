@@ -1,0 +1,5 @@
+# Temporary database
+db.sqlite3
+
+# Coverage
+.coverage
