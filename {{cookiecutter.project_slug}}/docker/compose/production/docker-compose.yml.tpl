@@ -5,7 +5,7 @@ services:
     environment:
       - DEBUG=off
       - SECRET_KEY=@@SECRET_KEY@@
-      - ALLOWED_HOST=backend
+      - ALLOWED_HOST=backend,localhost
       - REDIS_URL=redis://redis:6379/1
       - DATABASE_URL=pgsql://django:@@POSTGRES_PASSWORD@@@db:5432/backend
       - PGPASSWORD=@@POSTGRES_PASSWORD@@

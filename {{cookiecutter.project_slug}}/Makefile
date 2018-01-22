@@ -44,19 +44,22 @@ run: build_dev
 	@bash -c "trap 'trap - SIGINT; $(MAKE) internal_down; exit 0;' SIGINT; $(MAKE) internal_run; trap - SIGINT;"
 
 # Django command
-migrations: build_dev
+build_backend:
+	./tools/run/build.sh development backend
+
+migrations: build_backend
 	./tools/run/run.sh backend migration-backend
 	$(DOCKER) exec migration-backend python manage.py makemigrations
 	$(DOCKER) stop migration-backend
 	$(DOCKER) rm migration-backend
 
-single_shell: build_dev
+single_shell: build_backend
 	./tools/run/run.sh backend shell-backend
 	$(DOCKER) exec shell-backend /bin/bash
 	$(DOCKER) stop shell-backend
 	$(DOCKER) rm shell-backend
 
-single_django_shell: build_dev
+single_django_shell: build_backend
 	./tools/run/run.sh backend django-shell-backend
 	$(DOCKER) exec django-shell-backend python manage.py shell_plus
 	$(DOCKER) stop django-shell-backend
