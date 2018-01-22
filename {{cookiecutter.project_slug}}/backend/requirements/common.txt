@@ -1,10 +1,10 @@
 # Django
-django==1.11.7
+django==2.0.1
 
 # Add tools for basic django functionnality
-Pillow==4.3.0
-django-jet==1.0.6
-google-api-python-client==1.6.4
+Pillow==5.0.0
+django-jet==1.0.7
+google-api-python-client==1.6.5
 
 # Auth
 django-guardian==1.4.9
