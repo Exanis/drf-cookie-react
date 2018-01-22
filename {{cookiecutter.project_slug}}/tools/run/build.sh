@@ -61,7 +61,11 @@ else
     TARGET="${1}"
 fi
 
-build backend ${TARGET}
-build frontend ${TARGET}
-build database ${TARGET}
-build router ${TARGET}
+if [ -z "${2}" ]; then
+    build backend ${TARGET}
+    build frontend ${TARGET}
+    build database ${TARGET}
+    build router ${TARGET}
+else
+    build ${2} ${TARGET}
+fi
