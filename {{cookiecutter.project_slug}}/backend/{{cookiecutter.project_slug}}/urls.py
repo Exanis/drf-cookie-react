@@ -30,5 +30,5 @@ urlpatterns = [
         include('rest_framework.urls', namespace='rest_framework')
     ),
 
-    url(r'^api/1.0/tools/admin/', include(admin.site.urls)),
+    url(r'^api/1.0/tools/admin/', admin.site.urls),
 ]
