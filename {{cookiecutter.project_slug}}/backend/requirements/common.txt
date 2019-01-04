@@ -1,5 +1,5 @@
 # Django
-django==2.0.1
+django==2.1.5
 
 # Add tools for basic django functionnality
 Pillow==5.0.0
